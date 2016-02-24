@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Swiper demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+
+    <!-- Link Swiper's CSS -->
+    <link rel="stylesheet" href="./css/swiper.min.css">
+    <link rel="stylesheet" href="./css/animate.min.css">
+    <link rel="stylesheet" href="./css/index.css">
+
+    <!-- Demo styles -->
+    <style>
+      
+    </style>
+</head>
+<body>
+    <!-- Swiper -->
+    <div class="swiper-container">
+        <div id="swiperList" class="swiper-wrapper" style="display:none;">
+            <div class="swiper-slide">
+              <div class="text-align">
+                <div class="text1">2016年*第一吊</div>
+                <div class="text2">老俞大战永庞线原塘</div>
+                <div class="text3">江南牙叉叔出品</div>
+              </div>
+              <div>
+                <img id="pic1" class="cover" src="./images/1.png" />
+              </div>
+              <address>www.yddapp.com</address>
+            </div>
+            <div class="swiper-slide">
+              <img id="pic2" src="./images/2.jpg" />
+            </div>
+            <div class="swiper-slide">
+              <img id="pic3" src="./images/3.jpg" />
+            </div>
+            <div class="swiper-slide">
+              <img id="pic4" src="./images/4.jpg" />
+            </div>
+            <div class="swiper-slide">
+              <img id="pic5" src="./images/5.jpg" />
+            </div>
+            <div class="swiper-slide">
+              <img id="pic6" src="./images/6.jpg" />
+            </div>
+            <div class="swiper-slide">
+              <img id="pic7" src="./images/7.jpg" />
+            </div>
+            <div class="swiper-slide">
+              <img id="pic8" src="./images/8.jpg" />
+            </div>
+            <div class="swiper-slide">
+              <img id="pic9" src="./images/9.jpg" />
+            </div>
+            <div class="swiper-slide">
+              <img id="pic10" src="./images/10.jpg" />
+            </div>
+        </div>
+        <!-- Add Pagination -->
+        <div id="loadding" class="spinner">
+          <div class="double-bounce1"></div>
+          <div class="double-bounce2"></div>
+        </div>
+    </div>
+
+    <!-- Swiper JS -->
+    <script src="./js/swiper.min.js"></script>
+    <script src="./js/data.js"></script>
+    <script src="./js/jquery-1.8.3.min.js"></script>
+
+    <!-- Initialize Swiper -->
+    <script>
+
+
+        // 
+        // 
+
+      $(function() {
+
+
+        var screenWidth = document.documentElement.clientWidth;
+        var screenHeight = document.documentElement.clientHeight;
+        var totalPics = 0, loadPic = 0;
+
+
+        var animates = ['bounce','rubberBand','swing','bounceIn','bounceInLeft','bounceInRight','rotateIn','flipInX','fadeInLeft','fadeInRight'];
+
+
+        // parseInt(Math.random()*10)
+
+        //服务器获取数据
+        function getDataFromServer() {
+          $.ajax({  
+              url: 'http://api.shanggou.la/cpond/feed/detail',  
+              data: {  
+                  json: JSON.stringify({  
+                      'feed_id': '146166'  
+                  })  
+              },
+              type: "POST"  
+          })  
+          .then(function (response) {  
+              loadDataToObject(response);
+          });  
+        }
+
+        //解析分组数据
+        function loadDataToObject(datas) {
+          if(datas.errcode === 0) {
+            if(datas.response.code === 0) {
+              var data = datas.response.data;
+
+              var fish_extra = JSON.parse(data.fish_extra);
+              var fish_extra2 = JSON.parse(data.fish_extra2);
+
+              // console.log(fish_extra);
+              // console.log(fish_extra2);
+              
+              var args = {
+                'uname' : data.uname,
+                'avatar': data.avatar,
+
+                'species' : fish_extra2.species,                                    //目标鱼种
+                'weight' : fish_extra2.weight,                                      //渔获
+                'p_name' : data.p_name,                                             //钓点
+                'fishing_rod_brand' : fish_extra2.fishing_rod_brand,                //鱼竿
+                'bait_line' : fish_extra2.main_line+'+'+fish_extra2.child_line,     //线组
+                'bait_brand' : fish_extra2.bait_brand,                              //钓饵
+
+                'main_pic' : fish_extra[0]['img'],                                  //封面图
+                'title' : data.desc,                                                //标题
+
+                'main_pic_CSS' : animates[parseInt(Math.random()*10)],
+                'main_args_CSS': animates[parseInt(Math.random()*10)]
+              }
+
+              var lists = [];
+
+              for(var i=2; i<fish_extra.length;) {
+
+                if(fish_extra[i+1] && fish_extra[i+1]['text']) {
+                  lists.push({
+                    'img' : fish_extra[i]['img'],
+                    'text' : fish_extra[i+1]['text'],
+                    'animateImgCSS' : animates[parseInt(Math.random()*10)],
+                    'animateTextCSS' : animates[parseInt(Math.random()*10)]
+                  })
+
+                  i+=2;
+                }else{
+                  lists.push({
+                    'img' : fish_extra[i]['img'],
+                    'text' : '',
+                    'animateImgCSS' : animates[parseInt(Math.random()*10)]
+                  })
+                  i++;
+                }
+
+
+              }
+
+              generateHTML(args, lists);
+            }else{
+              console.error(datas.response.message);
+            }
+
+          }else{
+            //服务端接口出错
+            console.error(datas.errmsg);
+          }
+        }
+
+        loadDataToObject(datas);
+
+
+        //生成HTML
+        function generateHTML(args, lists) {
+          // console.log(lists)
+          var htmlStr = '';
+            htmlStr += '<div class="swiper-slide">'
+                    +'  <div class="text-align">'
+                    +'    <div class="text1">2016年*第一吊</div>'
+                    +'    <div class="text2">老俞大战永庞线原塘</div>'
+                    +'    <div class="text3">江南牙叉叔出品</div>'
+                    +'  </div>'
+                    +'  <img name="pics" class="cover" animate="'+args['main_pic_CSS']+'" class="animated bounceIn" src="'+args['main_pic']+'" />'
+                    +'  <address>www.yddapp.com</address>'
+                    +'</div>'
+
+          for(var i=0; i<lists.length;i++) {
+            htmlStr += '<div class="swiper-slide">'
+                    +'<img name="pics" src="'+lists[i]['img']+'" animate="'+lists[i]['animateImgCSS']+'" class="animated cover2"/>'
+                    if(lists[i]['text']) {
+                      htmlStr += '<div class="text-plane">'+lists[i]['text']+'</div>'
+                    }
+                    htmlStr +='</div>'
+          }
+
+          $('#swiperList').html(htmlStr);
+          $('.text-plane').hide('fast');
+
+          totalPics = $('img[name=pics]').length;
+
+          standardPicSize();
+
+          //动态获取图片最大宽度和最大高度
+          $('.swiper-wrapper img').css({'max-height' :screenHeight,'max-width':screenWidth})
+
+          new Swiper('.swiper-container', {
+              pagination: 'null',
+              direction: 'vertical',
+              slidesPerView: 1,
+              paginationClickable: true,
+              spaceBetween: 30,
+              mousewheelControl: true,
+              onSlideChangeEnd:function(swiper) {
+               
+                var curEl = $('img[name=pics]').eq(swiper.activeIndex)
+                var curAnimateImgCSS = curEl.attr('animate');
+                // alert([swiper.activeIndex, curAnimateImgCSS])
+                curEl.addClass(curAnimateImgCSS);
+                setTimeout(function() {
+                  curEl.parent().find('.text-plane').show();
+                  curEl.parent().find('.text-plane').addClass('animated').addClass(curAnimateImgCSS);
+                },1500)
+                removeAnimate(swiper.activeIndex);
+              }
+          });
+        }
+
+
+
+        //规范图片尺寸
+        function standardPicSize() {
+
+          $('img[name=pics]').load(function() {
+            var originalWidth = $(this).width();
+            var originalHeight = $(this).height();
+            var orginalRate = originalWidth/originalHeight;  //宽高比
+
+            var nowWidth = screenWidth;
+            var nowHeight = screenHeight ;
+
+
+            if(orginalRate > 1) { //实际宽度大于实际高度  取宽度
+              if(originalWidth > nowWidth) { //实际宽度大于屏幕宽度
+                $(this).width(nowWidth);
+              }else{
+                $(this).width(originalWidth);
+              }
+            }else if(orginalRate < 1) { //实际宽度小于实际高度  取高度
+              if(originalHeight > nowHeight) { //实际高度大于屏幕高度
+                $(this).height(nowHeight);
+              }else{
+                $(this).height(originalHeight);
+              }
+            }
+
+            loadPic++;
+
+            if(loadPic === totalPics) {
+              $('#loadding').remove();
+              $('#swiperList').css('display','block');
+              $('.swiper-container').css('background', '#000')
+            }
+
+          });
+        }
+
+
+        //移除动画
+        function removeAnimate(index) {
+          for(var i=0; i<$('img[name=pics]').length; i++) {
+            if(i !== index) {
+              var curAnimateImgCSS = $('img[name=pics]').eq(i).attr('animate');
+              $('img[name=pics]').eq(i).removeClass(curAnimateImgCSS);
+              if($('img[name=pics]').eq(i).parent().find('.text-plane')[0]){
+                $('img[name=pics]').eq(i).parent().find('.text-plane').removeClass(curAnimateImgCSS);
+              }
+            }
+          }
+        }
+
+      })
+    
+    </script>
+</body>
+</html>

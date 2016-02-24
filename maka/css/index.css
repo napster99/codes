@@ -1,0 +1,143 @@
+html, body {
+    position: relative;
+    height: 100%;
+}
+body {
+    background: #eee;
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    color:#000;
+    margin: 0;
+    padding: 0;
+}
+.swiper-container {
+    width: 100%;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+
+    background:-webkit-gradient(linear, left top, left bottom, from(#000), to(#00abeb), color-stop(0.8, #00abeb));
+ /*   background: #000;
+    opacity: .7*/
+}
+.swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    background: #292b2b;
+    color: #fff;
+
+    /* Center slide text vertically */
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+}
+
+.text-plane{
+  background: #000;
+  position: absolute;
+  bottom: 0;
+  height: 80px;
+  width: 100px;
+  left: 0;
+  width: 100%;
+  overflow: auto;
+  font-size: 12px;
+  opacity: 0.7;
+  z-index: 99999;
+  text-align: left;
+  padding: 10px 5px;
+}
+
+.text-align{
+  position: absolute;
+  right: 15px;
+  top: 20px;
+  text-align:right;
+}
+
+.text1{
+  font-size: 16px;
+}
+
+.text2{
+  margin-top: 10px;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.text3{
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+address{
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  margin-left: -70px;
+  color: #ccc;
+}
+
+.cover{
+  margin-top: 100px;
+}
+
+.cover2{
+}
+
+
+
+/* loadding css */
+.spinner {
+  width: 60px;
+  height: 60px;
+ 
+  position: relative;
+  top: 50%;
+  left: 50%;
+  margin-top: -30px;
+  margin-left: -30px;
+}
+ 
+.double-bounce1, .double-bounce2 {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #00212D;
+  opacity: 0.6;
+  position: absolute;
+  top: 0;
+  left: 0;
+   
+  -webkit-animation: bounce 2.0s infinite ease-in-out;
+  animation: bounce 2.0s infinite ease-in-out;
+}
+ 
+.double-bounce2 {
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s;
+}
+ 
+@-webkit-keyframes bounce {
+  0%, 100% { -webkit-transform: scale(0.0) }
+  50% { -webkit-transform: scale(1.0) }
+}
+ 
+@keyframes bounce {
+  0%, 100% {
+    transform: scale(0.0);
+    -webkit-transform: scale(0.0);
+  } 50% {
+    transform: scale(1.0);
+    -webkit-transform: scale(1.0);
+  }
+}
